@@ -4,8 +4,14 @@ import cors from "cors";
 import path from "path";
 import connectDB from "./config/db.js"
 import authRoutes from "./routes/authRoutes.js"
+import sessionRoutes from "./routes/sessionRoutes.js"
+import { fileURLToPath } from "url";
 const app = express();
 dotenv.config();
+
+// ES module replacement for __dirname
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 // middleware to handle CORS
 app.use(cors({
     origin: "#",
@@ -19,14 +25,14 @@ app.use(express.json());
 
 // Routes
 app.use("/api/auth", authRoutes);
-// app.use("/api/sessions", sessionRoutes);
+app.use("/api/sessions", sessionRoutes);
 // app.use("/api/questions", questionRoutes);
 // app.use("/api/ai/generate-questions", protect, generateInterviewQuestions)
 // app.use("/api/ai/generate-explanation", protect, generateConceptExplanation)
 // Uploads Folder
-// app.use("/uploads", express.static(path.join(__dirname, "uploads"), {}));
+app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT;
 app.listen(PORT, () => {
     console.log(`Server is running of ${PORT}`);
 })
