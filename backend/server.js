@@ -14,10 +14,11 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 // middleware to handle CORS
 app.use(cors({
-    origin: "#",
+    origin: "*",
     methods: ["GET", "POST", "PUT", "DELETE"],
     allowedHeaders: ["Content-Type", "Authorization"]
-}))
+}));
+
 
 connectDB()
 // middlware
@@ -36,3 +37,4 @@ const PORT = process.env.PORT;
 app.listen(PORT, () => {
     console.log(`Server is running of ${PORT}`);
 })
+console.log("PORT value:", process.env.PORT, typeof process.env.PORT);

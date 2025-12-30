@@ -48,7 +48,7 @@ export const loginUser = async (req, res) => {
         // Compare Password:
         const isMatch = await bcrypt.compare(password, user.password);
         if (!isMatch) {
-            return res.status(500).json({ message: "Invalid email or password" })
+            return res.status(401).json({ message: "Invalid email or password" });
         }
         // Retunr user data with JWT
         res.json({
