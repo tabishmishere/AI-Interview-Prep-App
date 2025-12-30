@@ -21,66 +21,64 @@ const SignUp = ({ setCurrentPage }) => {
   };
 
   return (
-    <div className="w-full max-w-[420px] bg-white rounded-xl p-5 sm:p-8 overflow-hidden mx-auto">
-      {/* Header */}
-      <h3 className="text-lg font-semibold text-gray-900">
-        Create an Account
-      </h3>
-      <p className="text-sm text-gray-500 mt-1 mb-5">
-        Join us today by entering your details below.
-      </p>
+     <div className="w-[92vw] sm:w-[420px] bg-white rounded-xl p-5 sm:p-8 mx-auto 
+                  overflow-hidden max-h-[90vh] overscroll-none">
+    <h3 className="text-lg font-semibold text-gray-900">
+      Create an Account
+    </h3>
+    <p className="text-sm text-gray-500 mt-1 mb-6">
+      Join us today by entering your details below.
+    </p>
 
-      {/* Form */}
-      <form onSubmit={handleSignup} className="space-y-4 overflow-x-hidden">
-        {/* Profile Photo */}
-        <div className="flex justify-center">
-          <ProfilePhotoSelector
-            image={profilePic}
-            setImage={setProfilePic}
-          />
-        </div>
-
-        <Input
-          label="Full Name"
-          placeholder="John"
-          value={fullName}
-          onChange={(e) => setFullName(e.target.value)}
+    <form onSubmit={handleSignup} className="space-y-5 overflow-hidden">
+      <div className="flex justify-center overflow-hidden max-h-[96px]">
+        <ProfilePhotoSelector
+          image={profilePic}
+          setImage={setProfilePic}
         />
+      </div>
 
-        <Input
-          label="Email Address"
-          placeholder="john@example.com"
-          type="email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-        />
+      <Input
+        label="Full Name"
+        placeholder="John"
+        value={fullName}
+        onChange={(e) => setFullName(e.target.value)}
+      />
 
-        <Input
-          label="Password"
-          placeholder="Min 8 Characters"
-          type="password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-        />
+      <Input
+        label="Email Address"
+        placeholder="john@example.com"
+        type="email"
+        value={email}
+        onChange={(e) => setEmail(e.target.value)}
+      />
 
-        {error && <p className="text-xs text-red-500">{error}</p>}
+      <Input
+        label="Password"
+        placeholder="Min 8 Characters"
+        type="password"
+        value={password}
+        onChange={(e) => setPassword(e.target.value)}
+      />
 
-        <button type="submit" className="btn-primary w-full">
-          SIGN UP
+      {error && <p className="text-xs text-red-500">{error}</p>}
+
+      <button type="submit" className="btn-primary w-full">
+        SIGN UP
+      </button>
+
+      <p className="text-sm text-gray-600 text-center pt-1">
+        Already have an account?{" "}
+        <button
+          type="button"
+          onClick={() => setCurrentPage("login")}
+          className="text-primary cursor-pointer font-medium underline"
+        >
+          Login
         </button>
-
-        <p className="text-sm text-gray-600 text-center">
-          Already have an account?{" "}
-          <button
-            type="button"
-            onClick={() => setCurrentPage("login")}
-            className="text-primary font-medium underline"
-          >
-            Login
-          </button>
-        </p>
-      </form>
-    </div>
+      </p>
+    </form>
+  </div>
   );
 };
 
