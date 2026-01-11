@@ -1,17 +1,26 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { LuSparkles } from "react-icons/lu";
 import { APP_FEATURES } from "../utils/data";
 import Login from "./Auth/Login";
 import SignUp from "./Auth/SignUp";
 import Model from "../components/Model";
+import { UserContext } from "../context/userContext";
+import ProfileInfoCard from "../components/Cards/ProfileInfoCard";
 
 const LandingPage = () => {
+  const { user } = useContext(UserContext);
   const navigate = useNavigate();
   const [openAuthModal, setOpenAuthModal] = useState(false);
   const [currentPage, setCurrentPage] = useState("login");
 
-  const handleCTA = () => {};
+  const handleCTA = () => {
+    if (!user) {
+      setOpenAuthModal(true);
+    } else {
+      navigate("/dashboard");
+    }
+  };
 
   return (
     <>
@@ -25,12 +34,16 @@ const LandingPage = () => {
                 Interview Prep AI
               </h1>
 
-              <button
-                onClick={() => setOpenAuthModal(true)}
-                className="rounded-full bg-gradient-to-r from-[#FF9324] to-[#E99A4B] px-6 py-3 font-medium text-white shadow-lg hover:opacity-90 cursor-pointer transition-all"
-              >
-                Login / Sign Up
-              </button>
+              {user ? (
+                <ProfileInfoCard />
+              ) : (
+                <button
+                  onClick={() => setOpenAuthModal(true)}
+                  className="rounded-full bg-gradient-to-r from-[#FF9324] to-[#E99A4B] px-6 py-3 font-medium text-white shadow-lg hover:opacity-90 cursor-pointer transition-all"
+                >
+                  Login / Sign Up
+                </button>
+              )}
             </header>
 
             {/* Hero Section */}
