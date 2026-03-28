@@ -93,11 +93,11 @@
 }
 
 .input-box {
-  @apply w-full flex justify-between gap-3 text-sm text-black bg-gray-50/50 rounded px-4 py-3  mb-4  mt-3  border border-gray-100 outline-none focus-within:border-orange-300;
+  @apply w-full min-w-0 flex justify-between gap-3 text-sm text-black bg-white rounded-xl px-4 py-3 border border-gray-200/90 outline-none transition-shadow focus-within:border-orange-400 focus-within:ring-2 focus-within:ring-orange-100/80;
 }
 
 .btn-primary {
-  @apply w-full flex items-center justify-center gap-3 text-sm font-medium text-white bg-black shadow-lg shadow-orange-600/5 p-[10px] rounded-md my-1 hover:bg-orange-600/15 hover:text-black cursor-pointer;
+  @apply w-full flex items-center justify-center gap-3 text-sm font-semibold text-white bg-gray-900 shadow-md shadow-orange-500/10 py-3 px-4 rounded-xl hover:bg-gray-800 cursor-pointer disabled:opacity-60 disabled:cursor-not-allowed transition-colors;
 }
 .btn-small {
   @apply flex items-center justify-center gap-3 bg-linear-to-r from-[#FF9324] to-[#e99a4b] text-sm font-semibold text-white px-7 py-3 rounded-lg hover:bg-black hover:text-white transition-colors cursor-pointer hover:shadow-2xl hover:shadow-orange-300;

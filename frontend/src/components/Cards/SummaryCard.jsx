@@ -13,54 +13,82 @@ const SummaryCard = ({
   onSelect,
   onDelete,
 }) => {
+  const expNum = Number(experience);
+  const yearLabel =
+    experience === "1" ||
+    experience === 1 ||
+    expNum === 1
+      ? "Year"
+      : "Years";
+
   return (
-    <div
-      className="bg-white border border-gray-300/10 rounded-xl p-2  overflow-hidden cursor-pointer hover:shadow-xl shadow-gray-100 relative group-[]:"
-      onClick={onSelect}
-    >
+    <div className="group bg-white border border-gray-200/90 rounded-2xl overflow-hidden shadow-sm hover:shadow-lg hover:border-gray-300/80 transition-all duration-200">
       <div
-        className="rounded-lg p-4 cursor-pointer relative"
+        className="rounded-t-2xl p-4 md:p-5 cursor-pointer relative"
         style={{ background: colors.bgcolor }}
+        onClick={onSelect}
+        role="button"
+        tabIndex={0}
+        onKeyDown={(e) => {
+          if (e.key === "Enter" || e.key === " ") {
+            e.preventDefault();
+            onSelect?.();
+          }
+        }}
       >
-        <div className="flex items-start">
-          <div className="flex-shrink w-12 h-12 rounded-md flex items-center justify-center mr-4">
-            {" "}
-            <span className="text-lg font-semibold text-black">{getInitials(role)}</span>
+        <div className="flex items-start gap-3">
+          <div className="flex-shrink-0 w-11 h-11 rounded-xl bg-white/70 border border-white/80 flex items-center justify-center shadow-sm">
+            <span className="text-sm font-bold text-gray-800">
+              {getInitials(role)}
+            </span>
           </div>
-          {/* Content Container */}
-          <div className="flex-grow">
-            <div className="flex justify-between items-start">
-              {/* Title and Skills */}
-              <div className="text-[17px] font-medium">
-                <h2 className="text-xs text-medium text-gray-900">{role}</h2>
-                <p className="">{topicsToFocus}</p>
-              </div>
-            </div>
+          <div className="flex-grow min-w-0">
+            <h2 className="text-base font-semibold text-gray-900 leading-snug truncate">
+              {role}
+            </h2>
+            <p className="text-sm text-gray-700 mt-0.5 line-clamp-2">
+              {topicsToFocus}
+            </p>
           </div>
+          <button
+            type="button"
+            className="opacity-0 group-hover:opacity-100 flex items-center gap-1.5 text-xs font-semibold text-rose-600 bg-white/90 border border-rose-200 px-2.5 py-1.5 rounded-lg hover:bg-rose-50 transition-opacity shrink-0"
+            onClick={(e) => {
+              e.stopPropagation();
+              onDelete?.();
+            }}
+            title="Delete session"
+          >
+            <LuTrash2 className="w-3.5 h-3.5" />
+          </button>
         </div>
-        <button
-          className="hidden group-hover:flex items-center gap-2 text-xs text-rose-500 font-medium bg-rose-50 px-3 py-1 rounded text-nowrap border border-rose-200 absolute top-0 right-0 hover:bg-rose-200 cursor-pointer"
-          onClick={(e) => {
-            e.stopPropagation();
-          }}
-        >
-          <LuTrash2 />
-        </button>
       </div>
-      <div className="px-3 pb-3">
-        <div className="flex items-center gap-3 mt-4">
-          <div className="text-[10px] font-medium text-black px-3 py-1 border-[0.5px] border-gray-900    rounded-full">
-            Experience: {experience} {experience === 1 ? "Year" : "Years"}
-          </div>
-          <div className="text-[10px] font-medium text-black px-3 py-1 border-[0.5px] border-gray-900 rounded-full">
+      <div
+        className="px-4 md:px-5 pb-4 pt-1 cursor-pointer"
+        onClick={onSelect}
+        role="button"
+        tabIndex={0}
+        onKeyDown={(e) => {
+          if (e.key === "Enter" || e.key === " ") {
+            e.preventDefault();
+            onSelect?.();
+          }
+        }}
+      >
+        <div className="flex flex-wrap items-center gap-2 mt-3">
+          <span className="text-[10px] font-semibold text-gray-800 px-2.5 py-1 rounded-full border border-gray-200 bg-gray-50/80">
+            Exp: {experience} {yearLabel}
+          </span>
+          <span className="text-[10px] font-semibold text-gray-800 px-2.5 py-1 rounded-full border border-gray-200 bg-gray-50/80">
             {questions} Q&A
-          </div>
-          <div className="text-[10px] font-medium text-black px-3 py-1 border-[0.5px] border-gray-900 rounded-full">
-            Last Updated: {lastUpdated}
-          </div>
+          </span>
+          {lastUpdated ? (
+            <span className="text-[10px] font-medium text-gray-500 px-2.5 py-1">
+              {lastUpdated}
+            </span>
+          ) : null}
         </div>
-        {/* Description */}
-        <p className="text-[12px] text-gray-500 font-medium line-clamp-2 mt-3   ">
+        <p className="text-[13px] text-gray-500 line-clamp-2 mt-3 leading-relaxed">
           {description}
         </p>
       </div>

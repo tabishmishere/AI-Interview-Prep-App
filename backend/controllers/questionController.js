@@ -34,8 +34,8 @@ export const addQuestionsToSession = async (req, res) => {
 
 export const togglePinQuestion = async (req, res) => {
     try {
-        const question = await Question.findById(req.param.id);
-        if (question) {
+        const question = await Question.findById(req.params.id);
+        if (!question) {
             return res.status(404).json({
                 success: false,
                 message: "Question not found."
@@ -51,7 +51,7 @@ export const togglePinQuestion = async (req, res) => {
 export const updateQuestionNote = async (req, res) => {
     try {
         const { note } = req.body;
-        const question = await Question.findById(req.param.id);
+        const question = await Question.findById(req.params.id);
         if (!question) {
             return res.status(404).json({ success: false, message: "Question not found." })
         }

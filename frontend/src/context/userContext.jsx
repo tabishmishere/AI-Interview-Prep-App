@@ -6,7 +6,9 @@ export const UserContext = createContext();
 
 const UserProvider = ({ children }) => {
   const [user, setUser] = useState(null);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(
+    () => !!localStorage.getItem("token"),
+  );
 
   useEffect(() => {
     const token = localStorage.getItem("token");

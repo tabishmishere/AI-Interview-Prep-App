@@ -16,6 +16,7 @@ const SignUp = ({ setCurrentPage }) => {
   const [error, setError] = useState("");
   const { updateUser } = useContext(UserContext);
   const navigate = useNavigate();
+
   const handleSignup = async (e) => {
     e.preventDefault();
 
@@ -24,9 +25,7 @@ const SignUp = ({ setCurrentPage }) => {
     if (!password) return setError("Please enter password.");
 
     setError("");
-    // SignUp API Call
     try {
-      // uploade image if present
       let profileImageUrl = "";
 
       if (profilePic) {
@@ -54,18 +53,19 @@ const SignUp = ({ setCurrentPage }) => {
       }
     }
   };
+
   return (
-    <div
-      className="w-[92vw] sm:w-[420px] bg-white rounded-xl p-5 sm:p-8 mx-auto 
-                  overflow-hidden max-h-[90vh] overscroll-none"
-    >
+    <div className="w-full min-w-0 max-w-[420px] mx-auto overflow-x-hidden">
       <h3 className="text-lg font-semibold text-gray-900">Create an Account</h3>
-      <p className="text-sm text-gray-500 mt-1 mb-6">
+      <p className="text-sm text-gray-500 mt-1 mb-5">
         Join us today by entering your details below.
       </p>
 
-      <form onSubmit={handleSignup} className="space-y-5 overflow-hidden">
-        <div className="flex justify-center overflow-hidden max-h-[96px]">
+      <form
+        onSubmit={handleSignup}
+        className="space-y-4 sm:space-y-5 w-full min-w-0"
+      >
+        <div className="flex justify-center w-full min-w-0 overflow-hidden py-1">
           <ProfilePhotoSelector image={profilePic} setImage={setProfilePic} />
         </div>
 
@@ -92,7 +92,11 @@ const SignUp = ({ setCurrentPage }) => {
           onChange={(e) => setPassword(e.target.value)}
         />
 
-        {error && <p className="text-xs text-red-500">{error}</p>}
+        {error && (
+          <p className="text-xs text-red-600 bg-red-50 border border-red-100 rounded-lg px-3 py-2 wrap-break-word">
+            {error}
+          </p>
+        )}
 
         <button type="submit" className="btn-primary w-full">
           SIGN UP

@@ -47,7 +47,7 @@ const Login = ({ setCurrentPage }) => {
   };
 
   return (
-    <div className="w-[92vw]sm:w-[420px] bg-white rounded-xl p-6 sm:p-8 overflow-hidden">
+    <div className="w-full min-w-0 max-w-[420px] mx-auto overflow-x-hidden">
       {/* Header */}
       <h3 className="text-lg font-semibold text-gray-900">Welcome Back</h3>
       <p className="text-sm text-gray-500 mt-1 mb-6">
@@ -73,7 +73,9 @@ const Login = ({ setCurrentPage }) => {
         />
 
         {error && (
-          <p className="text-xs text-red-500 mt-1 wrap-break-word">{error}</p>
+          <p className="text-xs text-red-600 bg-red-50 border border-red-100 rounded-lg px-3 py-2 wrap-break-word">
+            {error}
+          </p>
         )}
 
         <button type="submit" className="btn-primary">

@@ -13,7 +13,7 @@ export const generateInterviewQuestions = async (req, res) => {
             return res.status(400).json({ message: "Missing required fields." })
         }
         const prompt = questionAnswerPrompt(role, experience, topicsToFocus, numberOfQuestions);
-        const response = ai.models.generateContent({
+        const response = await ai.models.generateContent({
             model: "gemini-2.0-flash-lite",
             contents: prompt
         });
@@ -57,8 +57,8 @@ export const generateConceptExplanation = async (req, res) => {
         const data = JSON.parse(cleanedText);
         res.status(200).json(data)
     } catch (error) {
-        req.status(500).json({
-            message: "Failed to generate questions.",
+        res.status(500).json({
+            message: "Failed to generate explanation.",
             error: error.message
         })
     }
