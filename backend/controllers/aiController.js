@@ -1,31 +1,55 @@
 import { GoogleGenAI } from "@google/genai";
+import OpenAI from "openai";
 import { conceptExplainPrompt, questionAnswerPrompt } from "../utils/prompts.js"
 
-const ai = new GoogleGenAI({
-    apiKey: process.env.GEMINI_API_KEY
-})
+const getApiKey = () => process.env.GEMINI_API_KEY || process.env.OPENAI_API_KEY || "";
+const isOpenAiKey = (key) => key && key.startsWith("sk-");
 
-// Generate Interview Question/Answer Using Gemini API
+// Generate Interview Question/Answer 
 export const generateInterviewQuestions = async (req, res) => {
     try {
-        const { role, experience, topicsToFocus, numberOfQuestions } = req.body;
+        const { role, experience, topicsToFocus, numberOfQuestions, description } = req.body;
         if (!role || !experience || !topicsToFocus || !numberOfQuestions) {
             return res.status(400).json({ message: "Missing required fields." })
         }
-        const prompt = questionAnswerPrompt(role, experience, topicsToFocus, numberOfQuestions);
-        const response = await ai.models.generateContent({
-            model: "gemini-2.0-flash-lite",
-            contents: prompt
-        });
+        
+        const prompt = questionAnswerPrompt(role, experience, topicsToFocus, numberOfQuestions, description);
+        const apiKey = getApiKey();
+        let rawText = "";
 
-        let rawText = response.text;
-        // Clean It: Remove ```json and ``` from beginning and end
-        const cleanedText = rawText.replace(/^```json\s*/, "")      //remove starting ```json
-            .replace(/```$/, "")    //remove ending ```
-            .trim()     //remove extra spaces.
+        if (isOpenAiKey(apiKey)) {
+            const openai = new OpenAI({ apiKey });
+            const completion = await openai.chat.completions.create({
+                model: "gpt-4o-mini",
+                messages: [{ role: "user", content: prompt }]
+            });
+            rawText = completion.choices[0].message.content;
+        } else {
+            const ai = new GoogleGenAI({ apiKey });
+            const response = await ai.models.generateContent({
+                model: "gemini-2.0-flash-lite",
+                contents: prompt
+            });
+            rawText = response.text;
+        }
 
-        // now safe to parse data
-        const data = JSON.parse(cleanedText);
+        let data;
+        try {
+            data = JSON.parse(rawText);
+        } catch {
+            const jsonMatch = rawText.match(/```(?:json)?\s*([\s\S]*?)\s*```/);
+            if (jsonMatch && jsonMatch[1]) {
+                data = JSON.parse(jsonMatch[1]);
+            } else {
+                const startIdx = rawText.search(/[\{\[]/);
+                const endIdx = rawText.search(/[\}\]][^}\]]*$/);
+                if (startIdx !== -1 && endIdx !== -1 && endIdx >= startIdx) {
+                    data = JSON.parse(rawText.slice(startIdx, endIdx + 1));
+                } else {
+                    throw new Error("Could not parse JSON");
+                }
+            }
+        }
         res.status(200).json(data)
     } catch (error) {
         res.status(500).json({
@@ -34,6 +58,7 @@ export const generateInterviewQuestions = async (req, res) => {
         })
     }
 }
+
 // Generate Concept Explaination Using Gemini API
 export const generateConceptExplanation = async (req, res) => {
     try {
@@ -43,18 +68,42 @@ export const generateConceptExplanation = async (req, res) => {
         }
 
         const prompt = conceptExplainPrompt(question);
-        const response = await ai.models.generateContent({
-            model: "gemini-2.0-flash-lite",
-            contents: prompt,
-        });
-        let rawText = response.text;
-        // Clean It: Remove ```json and ``` from beginning and end
-        const cleanedText = rawText.replace(/^```json\s*/, "")      //remove starting ```json
-            .replace(/```$/, "")    //remove ending ```
-            .trim()     //remove extra spaces.
+        const apiKey = getApiKey();
+        let rawText = "";
 
-        // now safe to parse data
-        const data = JSON.parse(cleanedText);
+        if (isOpenAiKey(apiKey)) {
+            const openai = new OpenAI({ apiKey });
+            const completion = await openai.chat.completions.create({
+                model: "gpt-4o-mini",
+                messages: [{ role: "user", content: prompt }]
+            });
+            rawText = completion.choices[0].message.content;
+        } else {
+            const ai = new GoogleGenAI({ apiKey });
+            const response = await ai.models.generateContent({
+                model: "gemini-2.0-flash-lite",
+                contents: prompt,
+            });
+            rawText = response.text;
+        }
+
+        let data;
+        try {
+            data = JSON.parse(rawText);
+        } catch {
+            const jsonMatch = rawText.match(/```(?:json)?\s*([\s\S]*?)\s*```/);
+            if (jsonMatch && jsonMatch[1]) {
+                data = JSON.parse(jsonMatch[1]);
+            } else {
+                const startIdx = rawText.search(/[\{\[]/);
+                const endIdx = rawText.search(/[\}\]][^}\]]*$/);
+                if (startIdx !== -1 && endIdx !== -1 && endIdx >= startIdx) {
+                    data = JSON.parse(rawText.slice(startIdx, endIdx + 1));
+                } else {
+                    throw new Error("Could not parse JSON");
+                }
+            }
+        }
         res.status(200).json(data)
     } catch (error) {
         res.status(500).json({

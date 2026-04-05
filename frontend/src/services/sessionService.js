@@ -56,6 +56,7 @@ export async function createSessionFromForm(formData) {
     experience,
     topicsToFocus,
     numberOfQuestions: 10,
+    description,
   });
 
   const generated = aiResponse.data;

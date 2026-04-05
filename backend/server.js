@@ -25,15 +25,13 @@ app.use(cors({
 
 
 connectDB()
-// middleware
-app.use(express.json());
 
 // Routes
 app.use("/api/auth", authRoutes);
 app.use("/api/sessions", sessionRoutes);
 app.use("/api/questions", questionRoutes);
-app.use("/api/ai/generate-questions", protect, generateInterviewQuestions)
-app.use("/api/ai/generate-explanation", protect, generateConceptExplanation)
+app.post("/api/ai/generate-questions", protect, generateInterviewQuestions)
+app.post("/api/ai/generate-explanation", protect, generateConceptExplanation)
 // Uploads Folder
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 

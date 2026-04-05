@@ -33,8 +33,11 @@ axiosInstance.interceptors.response.use(
         // handle common errors globally
         if (error.response) {
             if (error.response?.status === 401) {
-                // Redirect to login
-                window.location.href = "/";
+                // Redirect to login if unauthorized, but skip if we are on landing/login/signup 
+                const path = window.location.pathname;
+                if (path !== "/" && path !== "/login" && path !== "/sign-up") {
+                    window.location.href = "/login";
+                }
             } else if (error.response.status === 500) {
                 console.error("Server error. Please try again later.")
             } else if (error.code === "ECONNABORTED") {
