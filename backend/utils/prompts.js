@@ -1,5 +1,11 @@
-export const questionAnswerPrompt = (role, experience, topicsToFocus, numberOfQuestions, description = "") => (
-    `You are an expert Senior Technical Recruiter and Staff Engineer conducting an interview.
+export const questionAnswerPrompt = (
+  role,
+  experience,
+  topicsToFocus,
+  numberOfQuestions,
+  description = "",
+) =>
+  `You are an expert Senior Technical Recruiter and Staff Engineer conducting an interview.
 
 Task: Generate high-quality interview questions and model answers based on the candidate's profile.
 - Role: ${role}
@@ -17,11 +23,10 @@ ${description ? `- Additional Context: ${description}\n` : ""}
     "answer": "Answer here."
   }
 ]
-Important: Do NOT add any conversational text, markdown formatting like \`\`\`json, or extra context outside the JSON structure.`
-);
+Important: Do NOT add any conversational text, markdown formatting like \`\`\`json, or extra context outside the JSON structure.`;
 
-export const conceptExplainPrompt = (question) => (
-    `You are an expert Staff Engineer and Technical Mentor.
+export const conceptExplainPrompt = (question) =>
+  `You are an expert Staff Engineer and Technical Mentor.
 
 Task: Break down and explain the following interview question and its underlying concepts deeply.
 - Question: "${question}"
@@ -34,5 +39,4 @@ Task: Break down and explain the following interview question and its underlying
   "title": "Short title here",
   "explanation": "Explanation here."
 }
-Important: Do NOT add any conversational text, markdown formatting like \`\`\`json, or extra context outside the JSON structure.`
-);
+Important: Do NOT add any conversational text, markdown formatting like \`\`\`json, or extra context outside the JSON structure.`;

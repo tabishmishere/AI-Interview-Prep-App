@@ -1,12 +1,14 @@
 import mongoose from "mongoose";
 
-const questionSchema = new mongoose.Schema({
+const questionSchema = new mongoose.Schema(
+  {
     session: { type: mongoose.Schema.Types.ObjectId, ref: "Session" },
     question: String,
     answer: String,
     note: String,
     isPinned: { type: Boolean, default: false },
-
-}, { timestamps: true });
+  },
+  { timestamps: true },
+);
 
 export default mongoose.model("Question", questionSchema);
