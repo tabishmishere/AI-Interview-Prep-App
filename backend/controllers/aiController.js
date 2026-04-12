@@ -38,7 +38,7 @@ export const generateInterviewQuestions = async (req, res) => {
     } else {
       const ai = new GoogleGenAI({ apiKey });
       const response = await ai.models.generateContent({
-        model: "gemini-2.0-flash-lite",
+        model: "gemini-2.5-flash",
         contents: prompt,
       });
       rawText = response.text;
@@ -92,7 +92,7 @@ export const generateConceptExplanation = async (req, res) => {
     } else {
       const ai = new GoogleGenAI({ apiKey });
       const response = await ai.models.generateContent({
-        model: "gemini-2.0-flash-lite",
+        model: "gemini-2.5-flash",
         contents: prompt,
       });
       rawText = response.text;
