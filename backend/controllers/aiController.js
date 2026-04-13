@@ -38,8 +38,9 @@ export const generateInterviewQuestions = async (req, res) => {
     } else {
       const ai = new GoogleGenAI({ apiKey });
       const response = await ai.models.generateContent({
-        model: "gemini-2.0-flash-lite",
+        model: "gemini-flash-latest",
         contents: prompt,
+        config: { responseMimeType: "application/json" }
       });
       rawText = response.text;
     }
@@ -48,14 +49,26 @@ export const generateInterviewQuestions = async (req, res) => {
     try {
       data = JSON.parse(rawText);
     } catch {
+      let parsed = false;
       const jsonMatch = rawText.match(/```(?:json)?\s*([\s\S]*?)\s*```/);
       if (jsonMatch && jsonMatch[1]) {
-        data = JSON.parse(jsonMatch[1]);
-      } else {
+        try {
+          data = JSON.parse(jsonMatch[1]);
+          parsed = true;
+        } catch (e) {
+          // ignore, try fallback
+        }
+      }
+      
+      if (!parsed) {
         const startIdx = rawText.search(/[\{\[]/);
         const endIdx = rawText.search(/[\}\]][^}\]]*$/);
         if (startIdx !== -1 && endIdx !== -1 && endIdx >= startIdx) {
-          data = JSON.parse(rawText.slice(startIdx, endIdx + 1));
+          try {
+            data = JSON.parse(rawText.slice(startIdx, endIdx + 1));
+          } catch(e) {
+            throw new Error("Could not parse JSON after extraction");
+          }
         } else {
           throw new Error("Could not parse JSON");
         }
@@ -63,8 +76,23 @@ export const generateInterviewQuestions = async (req, res) => {
     }
     res.status(200).json(data);
   } catch (error) {
+    console.error("Generate Interview Questions Error:", error);
+    let errorMessage = "Failed to generate questions.";
+    if (error && error.message) {
+      try {
+        const parsedError = JSON.parse(error.message);
+        if (parsedError.error && parsedError.error.message) {
+          errorMessage = parsedError.error.message;
+        } else {
+          errorMessage = error.message;
+        }
+      } catch(e) {
+        errorMessage = error.message;
+      }
+    }
+    
     res.status(500).json({
-      message: "Failed to generate questions.",
+      message: errorMessage,
       error: error.message,
     });
   }
@@ -92,8 +120,9 @@ export const generateConceptExplanation = async (req, res) => {
     } else {
       const ai = new GoogleGenAI({ apiKey });
       const response = await ai.models.generateContent({
-        model: "gemini-2.0-flash-lite",
+        model: "gemini-flash-latest",
         contents: prompt,
+        config: { responseMimeType: "application/json" }
       });
       rawText = response.text;
     }
@@ -102,14 +131,26 @@ export const generateConceptExplanation = async (req, res) => {
     try {
       data = JSON.parse(rawText);
     } catch {
+      let parsed = false;
       const jsonMatch = rawText.match(/```(?:json)?\s*([\s\S]*?)\s*```/);
       if (jsonMatch && jsonMatch[1]) {
-        data = JSON.parse(jsonMatch[1]);
-      } else {
+        try {
+          data = JSON.parse(jsonMatch[1]);
+          parsed = true;
+        } catch (e) {
+          // ignore, try fallback
+        }
+      }
+      
+      if (!parsed) {
         const startIdx = rawText.search(/[\{\[]/);
         const endIdx = rawText.search(/[\}\]][^}\]]*$/);
         if (startIdx !== -1 && endIdx !== -1 && endIdx >= startIdx) {
-          data = JSON.parse(rawText.slice(startIdx, endIdx + 1));
+          try {
+            data = JSON.parse(rawText.slice(startIdx, endIdx + 1));
+          } catch(e) {
+            throw new Error("Could not parse JSON after extraction");
+          }
         } else {
           throw new Error("Could not parse JSON");
         }
@@ -117,8 +158,23 @@ export const generateConceptExplanation = async (req, res) => {
     }
     res.status(200).json(data);
   } catch (error) {
+    console.error("Generate Explanation Error:", error);
+    let errorMessage = "Failed to generate explanation.";
+    if (error && error.message) {
+      try {
+        const parsedError = JSON.parse(error.message);
+        if (parsedError.error && parsedError.error.message) {
+          errorMessage = parsedError.error.message;
+        } else {
+          errorMessage = error.message;
+        }
+      } catch(e) {
+        errorMessage = error.message;
+      }
+    }
+    
     res.status(500).json({
-      message: "Failed to generate explanation.",
+      message: errorMessage,
       error: error.message,
     });
   }
