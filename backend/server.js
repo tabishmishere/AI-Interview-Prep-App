@@ -22,7 +22,8 @@ app.use(express.json());
 // middleware to handle CORS
 app.use(
   cors({
-    origin: "*",
+    origin: "https://ai-interview-prep-app-kappa.vercel.app/",
+    credentials: true,
     methods: ["GET", "POST", "PUT", "DELETE"],
     allowedHeaders: ["Content-Type", "Authorization"],
   }),

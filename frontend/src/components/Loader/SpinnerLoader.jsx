@@ -1,27 +1,51 @@
-import React from 'react'
+import React from "react";
 
-const SpinnerLoader = () => {
+const SpinnerLoader = ({ size = 40, label = "Loading..." }) => {
   return (
-    <div role="status">
-      <svg
-        aria-hidden="true"
-        className="inline w-5 h-5 text-gray-200 animate-spin dark:text-gray-600"
-        viewBox="0 0 100 101"
-        fill="none"
-        xmlns="http://www.w3.org/2000/svg"
+    <div className="flex flex-col items-center justify-center gap-3">
+      <div
+        className="relative"
+        style={{ width: size, height: size }}
+        role="status"
       >
-        <path
-          d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908Z"
-          fill="currentColor"
-        />
-        <path
-          d="M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421 39.6781 93.9676 39.0409Z"
-          fill="currentFill"
-        />
-      </svg>
-      <span className="sr-only">Loading...</span>
-    </div>
-  )
-}
+        {/* Glow background */}
+        <div className="absolute inset-0 rounded-full bg-gradient-to-r from-orange-400 via-orange-500 to-amber-500 blur-md opacity-40 animate-pulse"></div>
 
-export default SpinnerLoader
+        {/* Spinner */}
+        <svg
+          className="relative z-10 w-full h-full animate-spin"
+          viewBox="0 0 50 50"
+        >
+          <defs>
+            <linearGradient id="gradient">
+              <stop offset="0%" stopColor="#fb923c" />   {/* orange-400 */}
+              <stop offset="50%" stopColor="#f97316" />  {/* orange-500 */}
+              <stop offset="100%" stopColor="#f59e0b" /> {/* amber-500 */}
+            </linearGradient>
+          </defs>
+
+          <circle
+            cx="25"
+            cy="25"
+            r="20"
+            stroke="url(#gradient)"
+            strokeWidth="4"
+            strokeLinecap="round"
+            fill="none"
+            strokeDasharray="90"
+            strokeDashoffset="60"
+          />
+        </svg>
+      </div>
+
+      {/* Optional label */}
+      {label && (
+        <span className="text-sm text-orange-500 animate-pulse">
+          {label}
+        </span>
+      )}
+    </div>
+  );
+};
+
+export default SpinnerLoader;
