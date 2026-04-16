@@ -34,14 +34,27 @@ const Login = ({ setCurrentPage }) => {
       const { token } = response.data;
       if (token) {
         localStorage.setItem("token", token);
-        updateUser(response.data)
+        updateUser(response.data);
         navigate("/dashboard");
       }
     } catch (error) {
-      if (error.response && error.response.data.message) {
-        setError(error.response.data.message);
+      console.error("Login Error:", error); // ← Full error object
+      console.error("Error Response:", error.response); // ← Server response (most important)
+      console.error("Error Request:", error.request); // ← What was actually sent
+
+      if (error.response) {
+        // Server responded with error status (4xx, 5xx)
+        const message =
+          error.response.data?.message ||
+          error.response.data?.error ||
+          error.response.data ||
+          "Server error";
+        setError(message);
+      } else if (error.request) {
+        // Request was made but no response received (CORS, network, timeout, etc.)
+        setError("No response from server. Check network or CORS.");
       } else {
-        setError("Something went wrong.");
+        setError("Something went wrong. " + (error.message || ""));
       }
     }
   };
