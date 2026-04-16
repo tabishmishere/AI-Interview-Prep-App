@@ -1,4 +1,4 @@
-export const BASE_URL = import.meta.env.VITE_API_URL || "ai-interview-prep-app-production.up.railway.app";
+export const BASE_URL = import.meta.env.VITE_API_URL || "https://ai-interview-prep-app-production.up.railway.app";
 
 export const API_PATHS = {
   AUTH: {
