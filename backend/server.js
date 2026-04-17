@@ -22,7 +22,11 @@ app.use(express.json());
 // middleware to handle CORS
 app.use(
   cors({
-    origin: "*",
+    origin: [
+      "http://localhost:5173",
+      "http://localhost:5174",
+      "https://ai-interview-prep-app-production.up.railway.app",
+    ],
     credentials: true,
     methods: ["GET", "POST", "PUT", "DELETE"],
     allowedHeaders: ["Content-Type", "Authorization"],
